@@ -23,3 +23,9 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration Release'
   displayName: 'Build .NET Core project'
+
+  - task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(System.DefaultWorkingDirectory)/bin'
+    artifactName: 'build-output'
+    publishLocation: 'Container'
