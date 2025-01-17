@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: $(imageName)
 
 steps:
 - script: echo Hello, world!
@@ -29,3 +29,4 @@ steps:
     pathtoPublish: '$(System.DefaultWorkingDirectory)/bin'
     artifactName: 'build-output'
     publishLocation: 'Container'
+
