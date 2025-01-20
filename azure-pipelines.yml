@@ -32,11 +32,13 @@ steps:
 
 - script: |
     pip install urllib3==1.26.15 databricks-cli==0.17.6
+    export DATABRICKS_HOST=$(DATABRICKS_URL)
+    export DATABRICKS_TOKEN=$(DatabricksToken)
     databricks clusters list
-  displayName: 'Test Databricks CLI with compatible Dependencies'
+  displayName: 'Test Databricks CLI with Compatible Dependencies'
   env:
-    DATABRICKS_HOST: $(DATABRICKS_URL)
-    DATABRICKS_TOKEN: $(DatabricksToken)
+    DATABRICKS_URL: $(DATABRICKS_URL)
+    DatabricksToken: $(DatabricksToken)
 
 - script: |
     databricks clusters list
