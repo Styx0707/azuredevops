@@ -30,3 +30,17 @@ steps:
     artifactName: 'build-output'
     publishLocation: 'Container'
 
+- script: |
+    pip install databricks-cli
+    databricks configure --token --host "$(DATABRICKS_URL)" --token "$(DATABRICKS_TOKEN)"
+  displayName: 'Configure Databricks CLI'
+  env:
+    DATABRICKS_URL: $(DATABRICKS_URL)
+    DATABRICKS_TOKEN: $(DatabricksToken)
+
+- script: |
+    databricks clusters list
+  displayName: 'Test Databricks CLI Connection'
+  env:
+    DATABRICKS_TOKEN: $(DatabricksToken)
+
