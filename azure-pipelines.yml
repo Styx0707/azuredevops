@@ -31,11 +31,11 @@ steps:
     publishLocation: 'Container'
 
 - script: |
-    pip install databricks-cli
-    databricks configure --token --host "$(DATABRICKS_URL)" --token "$(DATABRICKS_TOKEN)"
-  displayName: 'Configure Databricks CLI'
+    pip install urllib3==1.26.15 databricks-cli==0.17.6
+    databricks clusters list
+  displayName: 'Test Databricks CLI with compatible Dependencies'
   env:
-    DATABRICKS_URL: $(DATABRICKS_URL)
+    DATABRICKS_HOST: $(DATABRICKS_URL)
     DATABRICKS_TOKEN: $(DatabricksToken)
 
 - script: |
