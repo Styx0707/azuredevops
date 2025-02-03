@@ -7,41 +7,44 @@ trigger:
 - master
 
 pool:
-  vmImage: $(imageName)
+  vmImage: 'windows-2019'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-- task: DotNetCoreCLI@2
+- task: PowerShell@2
   inputs:
-    command: 'build'
-    projects: '**/*.csproj'
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
+      
+       Write-Host "Build.SourceBranch = $(Build.SourceBranch)"
 
-# Publish the build output
+- task: CopyFiles@2
+  inputs:
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: True
+    Contents: |
+      Framework\**\*.py
+      Data Analysis\**\*.py
+      Ingestion\**\*.py
+      Integration\**\*.py
+      Standardization\**\*.py
+
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(System.DefaultWorkingDirectory)/bin'
-    artifactName: 'build-output'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Databricks_Artifact'
     publishLocation: 'Container'
 
-- script: |
-    pip install urllib3==1.26.15 databricks-cli==0.17.6
-    echo -e "$(DATABRICKS_URL)\n$(DatabricksToken)" | databricks configure --token
-    databricks clusters list
-  displayName: 'Configure Databricks CLI'
-  env:
-    DATABRICKS_URL: $(DATABRICKS_URL)
-    DatabricksToken: $(DatabricksToken)
+- task: CopyFiles@2
+  inputs:
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: True
+    Contents: |
+      *.py
 
-- script: |
-    databricks clusters list
-  displayName: 'Test Databricks CLI Connection'
-  env:
-    DATABRICKS_TOKEN: $(DatabricksToken)
-
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Databricks_Artifact_ETL_Runner'
+    publishLocation: 'Container'
